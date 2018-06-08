@@ -1,0 +1,71 @@
+---
+title: "Assesment"
+author: "Shrinath"
+date: "June 7, 2018"
+output: html_document
+Time started : 10:12 AM
+---
+
+# Problem Statement: Prediction the hospital readmissions for diabetes patients.
+
+
+```{r}
+train <- read.csv("C:/Users/patel/Desktop/data-challenge/training_data.csv")
+
+```
+
+
+# Exploring the data
+```{r}
+head(train)
+str(train)
+```
+
+# Replacing all "?" with "NA"
+ 
+
+```{r}
+train[train=="?"]<-NA
+
+```
+
+
+# Since Columns "Weight", "Payer_code", and "medical_specialty" has larger NA values and it not significant much so removing those columns.
+
+```{r}
+train <-  train[ ,-c(6,11,12)] 
+
+```
+
+SInce i didn't know the output to to test my model i splitted my train data into training _set and test_set and trained my model on training_set dataset tested it on test_set dataset.
+The output is categorical so its a classification problem so i can used Naive bayes, Logistic gression, Random forest and other classication algorithm.
+
+```{r}
+ #install.packages('caTools')
+ library(caTools)
+ set.seed(123)
+ split = sample.split(train$readmitted, SplitRatio = 0.75)
+ training_set = subset(train, split == TRUE)
+ test_set = subset(train, split == FALSE)
+ 
+ #install.packages('e1071')
+ library(e1071)
+ classifier = naiveBayes(x = training_set[-c(1,2,47)],
+                         y = training_set$readmitted)
+ 
+ # Predicting the Test set results
+ y_pred = predict(classifier, newdata = test_set[-c(1,2,47)])
+ 
+ # Making the Confusion Matrix
+ cm = table(test_set[,47], y_pred)
+cm 
+
+```
+# got 88.8 % accuracy
+
+# build a model for original test data using naive bayes
+
+
+
+
+
